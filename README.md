@@ -44,6 +44,16 @@ compiz-alike-magic-lamp-effect stripped out entirely for the reasons above.
 
 ## What's included
 
+- `scripts/00-zram.sh` — installs `systemd-zram-generator` and configures a
+  compressed RAM-backed swap device (half of RAM, capped at 4G, zstd,
+  checked before disk swap). Unrelated to the theme, but worth having on
+  RAM-constrained hardware — disk swap causes real stalls when hit, zram is
+  fast enough that hitting it barely registers.
+- `scripts/00-trim-autostart.sh` — disables the Evolution reminder-popup
+  daemon and the update-notifier tray icon via per-user autostart overrides
+  (no system files touched, no sudo). Also unrelated to the theme — these
+  just run on every login regardless of whether you use Evolution's mail/
+  calendar features.
 - `scripts/01-packages.sh` — apt packages (gnome-sushi for Quick Look-style
   previews, fonts-inter, nodejs/npm, flatpak, gnome-tweaks) and Sober
   (Flathub) for Roblox. Recent Ubuntu releases no longer ship Flatpak

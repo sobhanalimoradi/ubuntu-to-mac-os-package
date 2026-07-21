@@ -4,6 +4,8 @@
 set -e
 cd "$(dirname "$0")"
 
+bash scripts/00-zram.sh
+bash scripts/00-trim-autostart.sh
 bash scripts/01-packages.sh
 bash scripts/02-theme.sh
 bash scripts/03-extensions.sh
