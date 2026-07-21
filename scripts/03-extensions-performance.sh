@@ -1,15 +1,13 @@
 #!/bin/bash
-# GNOME Shell extensions — performance variant.
-# Drops dash2dock-lite and compiz-windows-effect in favor of the plain
-# dash-to-dock extension, which is much cheaper (no custom floating-dock
-# compositing every frame). desktop-cube and compiz-alike-magic-lamp-effect
-# are kept — they're cheap since they only run during their own transition,
-# not continuously. See dconf/org-gnome-shell-performance.ini for the
-# accompanying blur-my-shell fix: blur is turned off for the dash-to-dock
-# component (it was misconfigured — sigma=3, static-blur=false,
-# override-background=false — which left the dock's own semi-opaque
-# background showing through un-blurred; simplest fix is to not blur it at
-# all rather than fight a broken pipeline).
+# GNOME Shell extensions — performance variant, tuned for weak hardware
+# (developed against an Intel Celeron N5100 with 3.3GB RAM and integrated
+# graphics — gnome-shell alone idled at ~55% of one core with the lighter
+# cuts below still in place, so this is the aggressive tier).
+# Drops entirely: dash2dock-lite, compiz-windows-effect, desktop-cube,
+# compiz-alike-magic-lamp-effect (all animated/continuously-composited), and
+# blur-my-shell (blur recompute is a real, continuous compositor cost — not
+# just a one-off animation). Uses the plain dash-to-dock extension instead
+# of dash2dock-lite — much cheaper, no custom floating-dock compositing.
 set -e
 
 echo "==> Installing apt-packaged extensions (Ubuntu bundle + user-theme)..."
@@ -17,14 +15,9 @@ sudo apt-get install -y gnome-shell-ubuntu-extensions gnome-shell-extension-user
 
 echo "==> Installing store extensions via GNOME's official install mechanism..."
 # This triggers the normal extensions.gnome.org install flow for each UUID.
-# Deliberately excludes: dash2dock-lite, compiz-windows-effect (animated /
-# continuously-composited, expensive on weaker GPUs).
 STORE_UUIDS=(
-  desktop-cube@schneegans.github.com
   just-perfection-desktop@just-perfection
-  compiz-alike-magic-lamp-effect@hermes83.github.com
   Vitals@CoreCoding.com
-  blur-my-shell@aunetx
   dash-to-dock@micxgx.gmail.com
   rounded-window-corners@fxgn
   notification-position@drugo.dev
