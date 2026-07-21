@@ -4,7 +4,7 @@ set -e
 
 echo "==> Installing APT packages..."
 sudo apt-get update
-sudo apt-get install -y gnome-sushi fonts-inter nodejs npm flatpak gnome-software-plugin-flatpak
+sudo apt-get install -y gnome-sushi fonts-inter nodejs npm flatpak gnome-software-plugin-flatpak gnome-tweaks
 
 echo "==> Ensuring Flathub remote is configured..."
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo

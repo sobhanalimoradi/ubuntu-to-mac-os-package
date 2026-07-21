@@ -48,10 +48,10 @@ rather than reconstructed from scratch.
 ## What's included
 
 - `scripts/01-packages.sh` — apt packages (gnome-sushi for Quick Look-style
-  previews, fonts-inter, nodejs/npm, flatpak) and Sober (Flathub) for Roblox.
-  Recent Ubuntu releases no longer ship Flatpak preinstalled, so `flatpak` and
-  `gnome-software-plugin-flatpak` are installed explicitly before the Flathub
-  remote is added.
+  previews, fonts-inter, nodejs/npm, flatpak, gnome-tweaks) and Sober
+  (Flathub) for Roblox. Recent Ubuntu releases no longer ship Flatpak
+  preinstalled, so `flatpak` and `gnome-software-plugin-flatpak` are
+  installed explicitly before the Flathub remote is added.
 - `scripts/02-theme.sh` — clones and installs the MacTahoe GTK theme, icon
   theme, and cursors from vinceliuice's official repos (canonical upstream
   source, not a snapshot — this generates variants correctly). Passes
