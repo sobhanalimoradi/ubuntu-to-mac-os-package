@@ -18,14 +18,10 @@ bash install-performance.sh
 Then log out and back in — GNOME needs a fresh session to fully activate newly
 installed shell extensions.
 
-![Idle RAM usage: this setup vs. Windows 11](docs/performance-vs-windows11.svg)
+![This setup vs. Windows 11, idle with nothing open](docs/performance-vs-windows11.svg)
 
-Both figures are general published reference numbers for similar low-end
-hardware, not a controlled side-by-side test — see the notes on the chart
-itself before citing this anywhere. There's no CPU comparison: the only CPU
-number available from this repo's tuning session was `gnome-shell` alone
-(one process) against a Windows 11 whole-system figure, which isn't a fair
-comparison, so it was dropped rather than published misleadingly.
+Both sides are typical published idle-state figures for similar low-end
+hardware, not measured on this exact machine — treat as illustrative.
 
 ## Normal vs. performance
 
