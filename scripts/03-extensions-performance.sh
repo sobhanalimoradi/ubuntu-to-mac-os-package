@@ -1,25 +1,31 @@
 #!/bin/bash
 # GNOME Shell extensions — performance variant.
-# Skips the GPU-heavy animated extensions (desktop-cube, the two compiz-alike
-# effects, dash2dock-lite) and uses the built-in ubuntu-dock instead. See
-# dconf/org-gnome-shell-performance.ini for the accompanying blur-my-shell
-# fix (the stock dash-to-dock blur settings were tuned for dash2dock-lite's
-# floating pill; used on ubuntu-dock as-is they under-blur and don't override
-# the dock's own background, producing two mismatched translucent layers).
+# Drops dash2dock-lite and compiz-windows-effect in favor of the plain
+# dash-to-dock extension, which is much cheaper (no custom floating-dock
+# compositing every frame). desktop-cube and compiz-alike-magic-lamp-effect
+# are kept — they're cheap since they only run during their own transition,
+# not continuously. See dconf/org-gnome-shell-performance.ini for the
+# accompanying blur-my-shell fix: blur is turned off for the dash-to-dock
+# component (it was misconfigured — sigma=3, static-blur=false,
+# override-background=false — which left the dock's own semi-opaque
+# background showing through un-blurred; simplest fix is to not blur it at
+# all rather than fight a broken pipeline).
 set -e
 
-echo "==> Installing apt-packaged extensions (Ubuntu bundle, includes ubuntu-dock + user-theme)..."
+echo "==> Installing apt-packaged extensions (Ubuntu bundle + user-theme)..."
 sudo apt-get install -y gnome-shell-ubuntu-extensions gnome-shell-extension-user-theme
 
 echo "==> Installing store extensions via GNOME's official install mechanism..."
 # This triggers the normal extensions.gnome.org install flow for each UUID.
-# Deliberately excludes: desktop-cube, compiz-alike-magic-lamp-effect,
-# compiz-windows-effect, dash2dock-lite (animated / continuously-composited,
-# expensive on weaker GPUs).
+# Deliberately excludes: dash2dock-lite, compiz-windows-effect (animated /
+# continuously-composited, expensive on weaker GPUs).
 STORE_UUIDS=(
+  desktop-cube@schneegans.github.com
   just-perfection-desktop@just-perfection
+  compiz-alike-magic-lamp-effect@hermes83.github.com
   Vitals@CoreCoding.com
   blur-my-shell@aunetx
+  dash-to-dock@micxgx.gmail.com
   rounded-window-corners@fxgn
   notification-position@drugo.dev
   nightthemeswitcher@romainvigier.fr

@@ -20,28 +20,30 @@ installed shell extensions.
 
 ## Normal vs. performance
 
-`install.sh` is the uncompromised version — every extension, including the
-animated ones (desktop cube, magic lamp workspace switch, compiz windows
-effect) and the dash2dock-lite floating dock.
+`install.sh` is the uncompromised version — every extension, including
+dash2dock-lite (a floating, custom-compositing dock) and compiz-windows-effect.
 
-`install-performance.sh` drops those four animated extensions and uses
-`scripts/03-extensions-performance.sh` instead of `scripts/03-extensions.sh`.
-Since dash2dock-lite is gone, it falls back to `ubuntu-dock@ubuntu.com` (ships
-with `gnome-shell-ubuntu-extensions`, already apt-installed either way — no
-extra package needed). That fallback dock previously looked bugged/glitchy
-whenever it wasn't paired with dash2dock-lite: the checked-in blur-my-shell
-settings for the dash (`sigma=3`, `static-blur=false`,
-`override-background=false`) were essentially inert leftovers, so the dock's
+`install-performance.sh` drops those two (the heaviest, continuously-animated
+ones) via `scripts/03-extensions-performance.sh` and uses the plain
+`dash-to-dock@micxgx.gmail.com` extension instead — much cheaper, since it
+doesn't run its own compositing pipeline every frame the way dash2dock-lite
+does. desktop-cube and compiz-alike-magic-lamp-effect stay enabled in both
+versions, since they only animate during their own transition rather than
+continuously.
+
+Switching off dash2dock-lite exposed a pre-existing bug: blur-my-shell's
+dash-to-dock blur settings (`sigma=3`, `static-blur=false`,
+`override-background=false`) were inert leftovers, so plain dash-to-dock's
 own semi-opaque background (`background-opacity=0.8`) showed through
-un-blurred instead of getting the frosted-glass treatment — two mismatched
-translucent layers stacked on top of each other. `dconf/org-gnome-shell-performance.ini`
-fixes this: `override-background=true` + `static-blur=true` + `sigma=24` let
-blur-my-shell fully own the dock's background (so `background-opacity` is set
-to `0.0`), using the rounded pipeline that matches the dock's floating-pill
-shape (`extend-height=false`). The panel and dash also switch from dynamic to
-static blur (computed once instead of every frame), and overview/appfolder/
-application-grid blur are turned off — those recompute continuously while
-animating and are the most GPU-expensive part of blur-my-shell.
+un-blurred instead of getting a frosted-glass look — a glitchy, mismatched
+appearance. `dconf/org-gnome-shell-performance.ini` fixes it the simple way:
+blur is turned off for the dash-to-dock component entirely (`blur=false`)
+rather than patched, since the dock already looks clean on its own at
+`background-opacity=0.8`.
+
+This dconf file mirrors the configuration actually running and confirmed
+working well on the original dev machine — captured directly via `dconf dump`
+rather than reconstructed from scratch.
 
 ## What's included
 
@@ -59,10 +61,9 @@ animating and are the most GPU-expensive part of blur-my-shell.
   layout, notification position, day/night theme switching, etc.) from the
   `dconf/*.ini` dumps. Used by `install.sh`.
 - `scripts/03-extensions-performance.sh` — same idea, but skips
-  desktop-cube, compiz-alike-magic-lamp-effect, compiz-windows-effect, and
-  dash2dock-lite, and loads `dconf/org-gnome-shell-performance.ini` instead
-  (ubuntu-dock + the blur fix described above). Used by
-  `install-performance.sh`.
+  compiz-windows-effect and dash2dock-lite in favor of plain dash-to-dock, and
+  loads `dconf/org-gnome-shell-performance.ini` instead (includes the blur fix
+  described above). Used by `install-performance.sh`.
 - `scripts/04-launchers.sh` — installs the `~/.local/bin/*.sh` app-launcher
   scripts (Claude/Spotify/Firefox) and fixes `~/.bashrc` so `~/.local/bin` is
   on PATH in ordinary terminal windows, not just login shells.
