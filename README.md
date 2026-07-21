@@ -18,6 +18,14 @@ bash install-performance.sh
 Then log out and back in — GNOME needs a fresh session to fully activate newly
 installed shell extensions.
 
+![Idle resource usage: this setup vs. Windows 11](docs/performance-vs-windows11.svg)
+
+The CPU figure is a real measurement from this repo's tuning session, on the
+target machine (Celeron N5100, 3.3GB RAM). The RAM figures are general
+published reference numbers for similar low-end hardware, not a controlled
+side-by-side test — see the notes on the chart itself before citing this
+anywhere.
+
 ## Normal vs. performance
 
 `install.sh` is the uncompromised version — every extension, including
