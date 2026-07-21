@@ -51,9 +51,15 @@ compiz-alike-magic-lamp-effect stripped out entirely for the reasons above.
   fast enough that hitting it barely registers.
 - `scripts/00-trim-autostart.sh` — disables the Evolution reminder-popup
   daemon and the update-notifier tray icon via per-user autostart overrides
-  (no system files touched, no sudo). Also unrelated to the theme — these
-  just run on every login regardless of whether you use Evolution's mail/
-  calendar features.
+  (no system files touched, no sudo, reversible). Also masks
+  `gnome-software.service`: it's D-Bus-activated, and PackageKit fires a
+  "cache changed" signal after every single `apt-get`/`dpkg` operation, which
+  gnome-software responds to by re-resolving its entire app catalog — a
+  10+ minute CPU spike on weak hardware. Since this repo's own scripts run
+  several `apt-get install` calls back-to-back, that spike would otherwise
+  fire repeatedly on every install run, which is why this script runs first,
+  before anything else touches apt. Trade-off: the "Software" app icon won't
+  open until you run `systemctl --user unmask gnome-software.service`.
 - `scripts/01-packages.sh` — apt packages (gnome-sushi for Quick Look-style
   previews, fonts-inter, nodejs/npm, flatpak, gnome-tweaks) and Sober
   (Flathub) for Roblox. Recent Ubuntu releases no longer ship Flatpak
