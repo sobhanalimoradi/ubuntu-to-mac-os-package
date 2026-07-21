@@ -8,7 +8,12 @@ cd "$WORKDIR"
 echo "==> Cloning MacTahoe GTK theme..."
 git clone --depth=1 https://github.com/vinceliuice/MacTahoe-gtk-theme.git
 cd MacTahoe-gtk-theme
-./install.sh -d "$HOME/.themes"
+# -l/--libadwaita also writes the theme (incl. the red/yellow/green traffic-
+# light window-button assets) into ~/.config/gtk-4.0. Without it, only
+# ~/.themes gets the theme, which GTK4/libadwaita apps (Settings, Files, Text
+# Editor, ...) ignore entirely — they'd fall back to plain monochrome Adwaita
+# window buttons instead of the macOS-style colored dots. Must not run as root.
+./install.sh -d "$HOME/.themes" -l
 
 echo "==> Installing bundled day/night wallpapers..."
 mkdir -p "$HOME/.local/share/backgrounds"

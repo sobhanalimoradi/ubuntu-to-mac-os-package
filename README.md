@@ -54,7 +54,12 @@ rather than reconstructed from scratch.
   remote is added.
 - `scripts/02-theme.sh` — clones and installs the MacTahoe GTK theme, icon
   theme, and cursors from vinceliuice's official repos (canonical upstream
-  source, not a snapshot — this generates variants correctly).
+  source, not a snapshot — this generates variants correctly). Passes
+  `-l`/`--libadwaita` so the theme also lands in `~/.config/gtk-4.0` — without
+  it, GTK4/libadwaita apps (Settings, Files, Text Editor, ...) ignore
+  `~/.themes` entirely and fall back to plain monochrome Adwaita window
+  buttons instead of the macOS-style red/yellow/green traffic lights (which
+  are real colored PNG assets baked into the theme, not a config toggle).
 - `scripts/03-extensions.sh` — installs all GNOME Shell extensions (apt-bundled
   ones + store ones via the official install mechanism) and loads every
   setting that was tuned this session (dock behavior, animations, panel
