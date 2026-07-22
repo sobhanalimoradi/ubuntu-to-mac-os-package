@@ -21,16 +21,6 @@ echo "    - toTheBorder was hardcoded true, forcing the animation to always"
 echo "      fly to the literal screen edge even when the dock is visible."
 cp "$PATCH_DIR/magic-lamp-extension.js" "$EXT_DIR/compiz-alike-magic-lamp-effect@hermes83.github.com/extension.js"
 
-echo "==> Patching dash2dock-lite:"
-echo "    - integrations.js hardcoded the minimize-target icon size to 0,"
-echo "      so the lamp effect always aimed at the icon's top-left corner"
-echo "      instead of its center. Now uses the dock's real current icon size."
-echo "    - dock.js: the invisible 'struts' widget (reserved layout space,"
-echo "      no interactive purpose) was capturing clicks meant for windows"
-echo "      underneath. Explicitly disabled its input region."
-cp "$PATCH_DIR/dash2dock-lite-integrations.js" "$EXT_DIR/dash2dock-lite@icedman.github.com/integrations.js"
-cp "$PATCH_DIR/dash2dock-lite-dock.js" "$EXT_DIR/dash2dock-lite@icedman.github.com/dock.js"
-
 echo "==> Patching desktop-cube preferences:"
 echo "    - Adds a Workspaces group (dynamic-workspaces toggle + a fixed-count"
 echo "      spinner) directly to the extension's own prefs window, since the"
@@ -41,7 +31,6 @@ cp "$PATCH_DIR/desktop-cube-prefs.js" "$EXT_DIR/desktop-cube@schneegans.github.c
 echo "==> Reloading patched extensions..."
 for uuid in compiz-windows-effect@hermes83.github.com \
             compiz-alike-magic-lamp-effect@hermes83.github.com \
-            dash2dock-lite@icedman.github.com \
             desktop-cube@schneegans.github.com; do
   gnome-extensions disable "$uuid" 2>/dev/null || true
   sleep 1

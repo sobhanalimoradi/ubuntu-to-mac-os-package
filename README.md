@@ -25,22 +25,26 @@ hardware, not measured on this exact machine — treat as illustrative.
 
 ## Normal vs. performance
 
-`install.sh` is the uncompromised version — every extension, including
-dash2dock-lite (a floating, custom-compositing dock), compiz-windows-effect,
-desktop-cube, compiz-alike-magic-lamp-effect, and blur-my-shell.
+Both variants now use plain `dash-to-dock@micxgx.gmail.com` — dash2dock-lite
+(a floating, custom-compositing dock) was dropped entirely after its
+"compatibility hack" for hooking into the magic-lamp minimize effect turned
+out to be the source of several hard-to-diagnose bugs (crashes on this GNOME
+version, click-blocking, misaligned/misdirected minimize animations) that
+plain dash-to-dock doesn't have, since the magic-lamp effect's own built-in
+icon-detection logic was written against it in the first place.
+
+`install.sh` is the uncompromised version — every remaining animated
+extension: compiz-windows-effect, desktop-cube, compiz-alike-magic-lamp-effect,
+and blur-my-shell.
 
 `install-performance.sh` drops all of those via
 `scripts/03-extensions-performance.sh`, tuned against real hardware (an
 Intel Celeron N5100, 3.3GB RAM, integrated graphics) where `gnome-shell`
-alone idled at ~55-60% of one core even with just the lighter first-pass cuts
-(dash2dock-lite + compiz-windows-effect dropped, desktop-cube/magic-lamp/
-blur-my-shell kept). blur-my-shell in particular is a continuous compositor
-cost, not a one-off animation like the other two — it recomputes on every
-panel/dock/overview redraw, so "only animates during its own transition"
-doesn't apply to it the way it does to desktop-cube or the magic-lamp effect.
-Uses the plain `dash-to-dock@micxgx.gmail.com` extension instead of
-dash2dock-lite — much cheaper, no custom floating-dock compositing pipeline
-every frame.
+alone idled at ~55-60% of one core even with just the lighter first-pass cuts.
+blur-my-shell in particular is a continuous compositor cost, not a one-off
+animation like the other two — it recomputes on every panel/dock/overview
+redraw, so "only animates during its own transition" doesn't apply to it the
+way it does to desktop-cube or the magic-lamp effect.
 
 `dconf/org-gnome-shell-performance.ini` started as a capture of the
 configuration actually running and confirmed working well on the original
@@ -84,9 +88,8 @@ compiz-alike-magic-lamp-effect stripped out entirely for the reasons above.
   layout, notification position, day/night theme switching, etc.) from the
   `dconf/*.ini` dumps. Used by `install.sh`.
 - `scripts/03-extensions-performance.sh` — same idea, but skips
-  compiz-windows-effect, dash2dock-lite, desktop-cube,
-  compiz-alike-magic-lamp-effect, and blur-my-shell entirely, using plain
-  dash-to-dock instead, and loads `dconf/org-gnome-shell-performance.ini`
+  compiz-windows-effect, desktop-cube, compiz-alike-magic-lamp-effect, and
+  blur-my-shell entirely, and loads `dconf/org-gnome-shell-performance.ini`
   instead (see above). Used by `install-performance.sh`.
 - `scripts/04-launchers.sh` — installs the `~/.local/bin/*.sh` app-launcher
   scripts (Claude/Spotify/Firefox) and fixes `~/.bashrc` so `~/.local/bin` is
@@ -103,6 +106,9 @@ compiz-alike-magic-lamp-effect stripped out entirely for the reasons above.
   across extension versions.
 - `scripts/08-uncap-workspaces.sh` — raises GNOME's hard-coded 36-workspace
   ceiling. Needs `sudo` since it edits a system schema file directly.
+- `scripts/09-terminal.sh` — installs a custom "Tahoe Night" color palette
+  (`config/tahoe-night.palette`, Tokyo-Night-inspired) for the Ptyxis
+  terminal and sets it active with a light 90% opacity.
 
 ## Extension patches
 
@@ -120,16 +126,6 @@ affected file outright (see `patches/`):
   hardcoded `true`, forcing the animation to always fly to the literal
   monitor edge once it detected the icon was near a screen border, even when
   the dock was fully visible partway up from that edge. Set to `false`.
-- **dash2dock-lite** — `integrations.js` computed the minimize-animation
-  target's size as a hardcoded `0` (the real values were commented out in the
-  original code), collapsing "center of icon" to "top-left corner of icon."
-  Now uses the dock's actual current icon size (`dock._iconSizeScaledDown`).
-  `dock.js` — the invisible `struts` widget (exists purely to reserve layout
-  space, no interactive purpose) had no explicit `affectsInputRegion: false`,
-  so on this GNOME version it defaulted to capturing clicks meant for
-  windows/desktop underneath, at the bottom of the screen, dock visible or
-  not. The surrounding code even had commented-out attempts at this same fix
-  left unfinished.
 - **desktop-cube** — its own preferences window had no way to control
   workspace count at all, despite the cube requiring a fixed count to render
   correctly. Added a "Workspaces" group (dynamic-workspaces toggle + a
@@ -155,6 +151,12 @@ affected file outright (see `patches/`):
 - Liquid Glass shell extension — tried it, you didn't like it, removed.
 - Rounded Window Corners Reborn — removed after it turned out to fundamentally
   conflict with the wobbly-windows effect (see "Extension patches").
+- dash2dock-lite — removed after its dash2dock-lite-specific hook into the
+  magic-lamp minimize effect proved to be a source of several serious,
+  hard-to-diagnose bugs (a crash on this GNOME version's `addChrome()` API,
+  invisible-widget click-blocking, misaligned/misdirected minimize
+  animations) — see "Normal vs. performance" above. Both variants now use
+  plain `dash-to-dock`.
 - The logo-menu extension's custom icon was reset to default rather than
   carried over (it was pointing at an offensive image in your Downloads).
 - Several extensions present on the live desktop this was packaged from

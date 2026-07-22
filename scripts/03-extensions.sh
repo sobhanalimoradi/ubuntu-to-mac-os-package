@@ -14,8 +14,7 @@ STORE_UUIDS=(
   compiz-windows-effect@hermes83.github.com
   Vitals@CoreCoding.com
   blur-my-shell@aunetx
-  dash2dock-lite@icedman.github.com
-  rounded-window-corners@fxgn
+  dash-to-dock@micxgx.gmail.com
   notification-position@drugo.dev
   nightthemeswitcher@romainvigier.fr
   logomenu@aryan_k
@@ -34,7 +33,6 @@ echo "==> Loading saved enabled/disabled extension state + all extension setting
 DCONF_DIR="$(dirname "$0")/../dconf"
 declare -A DCONF_PATHS=(
   [org-gnome-shell.ini]="/org/gnome/shell/"
-  [org-gnome-shell-extensions-dash2dock-lite.ini]="/org/gnome/shell/extensions/dash2dock-lite/"
   [org-gnome-shell-extensions-just-perfection.ini]="/org/gnome/shell/extensions/just-perfection/"
   [org-gnome-shell-extensions-nightthemeswitcher.ini]="/org/gnome/shell/extensions/nightthemeswitcher/"
   [org-gnome-shell-extensions-notification-position.ini]="/org/gnome/shell/extensions/notification-position/"

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Performance variant: same macOS-Tahoe theming as install.sh, but skips the
 # GPU-heavy animated GNOME Shell extensions (desktop cube, magic lamp, compiz
-# windows effect, dash2dock-lite) in favor of the built-in ubuntu-dock. See
+# windows effect) in favor of plain dash-to-dock. See
 # scripts/03-extensions-performance.sh and dconf/org-gnome-shell-performance.ini.
 # Run from a normal terminal: bash install-performance.sh
 set -e
@@ -15,6 +15,8 @@ bash scripts/03-extensions-performance.sh
 bash scripts/04-launchers.sh
 bash scripts/05-firefox-theme.sh
 bash scripts/06-claude-cli.sh || echo "(skipped claude CLI symlink — open the Claude desktop app once, then run scripts/06-claude-cli.sh)"
+bash scripts/08-uncap-workspaces.sh
+bash scripts/09-terminal.sh || echo "(skipped terminal palette — open Ptyxis once, then run scripts/09-terminal.sh)"
 
 echo
 echo "=================================================="

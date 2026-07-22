@@ -14,6 +14,7 @@ bash scripts/05-firefox-theme.sh
 bash scripts/06-claude-cli.sh || echo "(skipped claude CLI symlink — open the Claude desktop app once, then run scripts/06-claude-cli.sh)"
 bash scripts/07-extension-patches.sh
 bash scripts/08-uncap-workspaces.sh
+bash scripts/09-terminal.sh || echo "(skipped terminal palette — open Ptyxis once, then run scripts/09-terminal.sh)"
 
 echo
 echo "=================================================="
