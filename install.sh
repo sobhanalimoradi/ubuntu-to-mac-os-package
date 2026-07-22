@@ -10,6 +10,8 @@ bash scripts/03-extensions.sh
 bash scripts/04-launchers.sh
 bash scripts/05-firefox-theme.sh
 bash scripts/06-claude-cli.sh || echo "(skipped claude CLI symlink — open the Claude desktop app once, then run scripts/06-claude-cli.sh)"
+bash scripts/07-extension-patches.sh
+bash scripts/08-uncap-workspaces.sh
 
 echo
 echo "=================================================="
