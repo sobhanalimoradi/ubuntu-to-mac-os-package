@@ -8,21 +8,86 @@ GNOME install:
 bash install.sh
 ```
 
+There's also a performance variant for weaker hardware — same theme, wallpapers
+and layout, but without the GPU-heavy animated extensions:
+
+```
+bash install-performance.sh
+```
+
 Then log out and back in — GNOME needs a fresh session to fully activate newly
 installed shell extensions.
 
+![This setup vs. Windows 11, idle with nothing open](docs/performance-vs-windows11.svg)
+
+Both sides are typical published idle-state figures for similar low-end
+hardware, not measured on this exact machine — treat as illustrative.
+
+## Normal vs. performance
+
+`install.sh` is the uncompromised version — every extension, including
+dash2dock-lite (a floating, custom-compositing dock), compiz-windows-effect,
+desktop-cube, compiz-alike-magic-lamp-effect, and blur-my-shell.
+
+`install-performance.sh` drops all of those via
+`scripts/03-extensions-performance.sh`, tuned against real hardware (an
+Intel Celeron N5100, 3.3GB RAM, integrated graphics) where `gnome-shell`
+alone idled at ~55-60% of one core even with just the lighter first-pass cuts
+(dash2dock-lite + compiz-windows-effect dropped, desktop-cube/magic-lamp/
+blur-my-shell kept). blur-my-shell in particular is a continuous compositor
+cost, not a one-off animation like the other two — it recomputes on every
+panel/dock/overview redraw, so "only animates during its own transition"
+doesn't apply to it the way it does to desktop-cube or the magic-lamp effect.
+Uses the plain `dash-to-dock@micxgx.gmail.com` extension instead of
+dash2dock-lite — much cheaper, no custom floating-dock compositing pipeline
+every frame.
+
+`dconf/org-gnome-shell-performance.ini` started as a capture of the
+configuration actually running and confirmed working well on the original
+dev machine (via `dconf dump`), then had blur-my-shell, desktop-cube, and
+compiz-alike-magic-lamp-effect stripped out entirely for the reasons above.
+
 ## What's included
 
+- `scripts/00-zram.sh` — installs `systemd-zram-generator` and configures a
+  compressed RAM-backed swap device (half of RAM, capped at 4G, zstd,
+  checked before disk swap). Unrelated to the theme, but worth having on
+  RAM-constrained hardware — disk swap causes real stalls when hit, zram is
+  fast enough that hitting it barely registers.
+- `scripts/00-trim-autostart.sh` — disables the Evolution reminder-popup
+  daemon and the update-notifier tray icon via per-user autostart overrides
+  (no system files touched, no sudo, reversible). Also masks
+  `gnome-software.service`: it's D-Bus-activated, and PackageKit fires a
+  "cache changed" signal after every single `apt-get`/`dpkg` operation, which
+  gnome-software responds to by re-resolving its entire app catalog — a
+  10+ minute CPU spike on weak hardware. Since this repo's own scripts run
+  several `apt-get install` calls back-to-back, that spike would otherwise
+  fire repeatedly on every install run, which is why this script runs first,
+  before anything else touches apt. Trade-off: the "Software" app icon won't
+  open until you run `systemctl --user unmask gnome-software.service`.
 - `scripts/01-packages.sh` — apt packages (gnome-sushi for Quick Look-style
-  previews, fonts-inter, nodejs/npm) and Sober (Flathub) for Roblox.
+  previews, fonts-inter, nodejs/npm, flatpak, gnome-tweaks) and Sober
+  (Flathub) for Roblox. Recent Ubuntu releases no longer ship Flatpak
+  preinstalled, so `flatpak` and `gnome-software-plugin-flatpak` are
+  installed explicitly before the Flathub remote is added.
 - `scripts/02-theme.sh` — clones and installs the MacTahoe GTK theme, icon
   theme, and cursors from vinceliuice's official repos (canonical upstream
-  source, not a snapshot — this generates variants correctly).
+  source, not a snapshot — this generates variants correctly). Passes
+  `-l`/`--libadwaita` so the theme also lands in `~/.config/gtk-4.0` — without
+  it, GTK4/libadwaita apps (Settings, Files, Text Editor, ...) ignore
+  `~/.themes` entirely and fall back to plain monochrome Adwaita window
+  buttons instead of the macOS-style red/yellow/green traffic lights (which
+  are real colored PNG assets baked into the theme, not a config toggle).
 - `scripts/03-extensions.sh` — installs all GNOME Shell extensions (apt-bundled
   ones + store ones via the official install mechanism) and loads every
   setting that was tuned this session (dock behavior, animations, panel
   layout, notification position, day/night theme switching, etc.) from the
-  `dconf/*.ini` dumps.
+  `dconf/*.ini` dumps. Used by `install.sh`.
+- `scripts/03-extensions-performance.sh` — same idea, but skips
+  compiz-windows-effect, dash2dock-lite, desktop-cube,
+  compiz-alike-magic-lamp-effect, and blur-my-shell entirely, using plain
+  dash-to-dock instead, and loads `dconf/org-gnome-shell-performance.ini`
+  instead (see above). Used by `install-performance.sh`.
 - `scripts/04-launchers.sh` — installs the `~/.local/bin/*.sh` app-launcher
   scripts (Claude/Spotify/Firefox) and fixes `~/.bashrc` so `~/.local/bin` is
   on PATH in ordinary terminal windows, not just login shells.
