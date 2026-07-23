@@ -16,7 +16,7 @@ else
   dconf write "/org/gnome/Ptyxis/Profiles/$PROFILE_UUID/opacity" "0.9"
 fi
 
-echo "==> Installing fastfetch (system-info splash with an Apple logo)..."
+echo "==> Installing fastfetch (system-info splash with an Tux penguin logo)..."
 sudo apt-get install -y fastfetch
 mkdir -p "$HOME/.config/fastfetch"
 cp "$(dirname "$0")/../config/fastfetch-config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
