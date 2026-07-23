@@ -1,6 +1,6 @@
 #!/bin/bash
 # Terminal: Ptyxis custom palette + transparency, plus a fastfetch splash
-# (Apple logo + system info) on every new interactive shell.
+# (Ubuntu logo + system info) on every new interactive shell.
 set -e
 
 echo "==> Installing custom 'Tahoe Night' palette for Ptyxis..."
@@ -16,7 +16,7 @@ else
   dconf write "/org/gnome/Ptyxis/Profiles/$PROFILE_UUID/opacity" "0.9"
 fi
 
-echo "==> Installing fastfetch (system-info splash with an Tux penguin logo)..."
+echo "==> Installing fastfetch (system-info splash with the Ubuntu logo)..."
 sudo apt-get install -y fastfetch
 mkdir -p "$HOME/.config/fastfetch"
 cp "$(dirname "$0")/../config/fastfetch-config.jsonc" "$HOME/.config/fastfetch/config.jsonc"

@@ -109,7 +109,7 @@ compiz-alike-magic-lamp-effect stripped out entirely for the reasons above.
 - `scripts/09-terminal.sh` — installs a custom "Tahoe Night" color palette
   (`config/tahoe-night.palette`, Tokyo-Night-inspired) for the Ptyxis
   terminal and sets it active with a light 90% opacity. Also installs
-  `fastfetch` with a Tux (penguin) splash (`config/fastfetch-config.jsonc`)
+  `fastfetch` with an Ubuntu-logo splash (`config/fastfetch-config.jsonc`)
   that runs automatically on every new interactive shell via `.bashrc`.
 
 ## Extension patches
