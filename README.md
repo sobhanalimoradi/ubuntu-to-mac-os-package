@@ -108,7 +108,9 @@ compiz-alike-magic-lamp-effect stripped out entirely for the reasons above.
   ceiling. Needs `sudo` since it edits a system schema file directly.
 - `scripts/09-terminal.sh` — installs a custom "Tahoe Night" color palette
   (`config/tahoe-night.palette`, Tokyo-Night-inspired) for the Ptyxis
-  terminal and sets it active with a light 90% opacity.
+  terminal and sets it active with a light 90% opacity. Also installs
+  `fastfetch` with an Apple-logo splash (`config/fastfetch-config.jsonc`)
+  that runs automatically on every new interactive shell via `.bashrc`.
 
 ## Extension patches
 
